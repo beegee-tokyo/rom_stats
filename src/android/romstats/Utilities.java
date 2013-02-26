@@ -19,14 +19,17 @@ package android.romstats;
 import java.math.BigInteger;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
+import java.lang.Object; 
 
 import android.content.Context;
 import android.os.SystemProperties;
 import android.telephony.TelephonyManager;
+import android.util.Slog;
 
 public class Utilities {
 	public static final String SETTINGS_PREF_NAME = "ROMStats";
 	public static final String TAG = "ROMStats";
+        String[] isoCountry;
 
 	public static String getUniqueID(Context ctx) {
 		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
@@ -327,10 +330,15 @@ public class Utilities {
 	            "zr", "Zaire",
 	            "zw", "Zimbabwe",        };
 
+                // try to get country code from phone manager
 		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
 		String countryCode = tm.getNetworkCountryIso();
 		if (countryCode.equals("")) {
-			countryCode = "Unknown";
+                   // if this failes, use locale that the phone/tablet is set to
+                   countryCode = ctx.getResources().getConfiguration().locale.getCountry().toLowerCase();
+   		   if (countryCode.equals("")) {
+		   	   countryCode = "Unknown";
+		   }
 		}
                 String countryName = countryCode;
 		for (int i = 0; i < world.length; i += 2) {
@@ -338,6 +346,7 @@ public class Utilities {
                       countryName = world[i+1];
                    }
                 }
+Slog.d(Utilities.TAG, "Country: " + countryName);
 		return countryName;
 	}
 

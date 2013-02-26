@@ -52,5 +52,5 @@
     <string name="preview_country_title">Country</string>
     <string name="preview_carrier_title">Carrier</string>    
     <string name="preview_romname_title">ROM Name</string>    
-    <string name="preview_romversion_title">ROM Version</string>    
+    <string name="preview_romversion_title">ROM Version</string>   
 </resources>
