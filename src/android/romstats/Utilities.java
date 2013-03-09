@@ -29,7 +29,6 @@ import android.util.Slog;
 public class Utilities {
 	public static final String SETTINGS_PREF_NAME = "ROMStats";
 	public static final String TAG = "ROMStats";
-        String[] isoCountry;
 
 	public static String getUniqueID(Context ctx) {
 		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
@@ -64,10 +63,17 @@ public class Utilities {
 	}
 
 	public static String getCarrier(Context ctx) {
-		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-		String carrier = tm.getNetworkOperatorName();
-		if ("".equals(carrier)) {
-			carrier = "Unknown";
+                String carrier = SystemProperties.get("ro.product.model"); 
+                if (carrier.equals("GT-P7510")) {
+                        carrier = "WiFi";
+                } else if (carrier.equals("GT-P7511")) {
+                        carrier = "WiFi";
+                } else {
+        		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+			carrier = tm.getNetworkOperatorName();
+			if ("".equals(carrier)) {
+				carrier = "Unknown";
+			}
 		}
 		return carrier;
 	}
@@ -346,7 +352,6 @@ public class Utilities {
                       countryName = world[i+1];
                    }
                 }
-Slog.d(Utilities.TAG, "Country: " + countryName);
 		return countryName;
 	}
 
