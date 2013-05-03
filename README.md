@@ -1,6 +1,8 @@
 ROM Stats
 =========
 
+**Ganbarou adaption**: Some smaller changes to make it compile with the ROM and get better country results
+
 **Description**: Usage statistics for ROM developer (a la Cyanogenmod Stats)
 
 CyanogenMod has a feature to report anonymous Statistics to the Cyanogenmod Team: on first boot the user is given the choice to send anonymous statistics to CyanogenMod website (http://stats.cyanogenmod.com).
@@ -40,3 +42,11 @@ I added a new option in the main screen, Uninstall, which will appear the app is
 
 **Update 2 (02/02/2013)**:
 A new parameter (tframe) has been added, to allow the developer decide on the frequency of reporting to the server, by default it reports once every 7 days, but with this parameter it can be customized.
+
+**Commits for Ganbarou version**:
+**28/03/2013**: Updated list of network providers
+**08/03/2013**: Updated to get better results for country 
+**26/02/2013**: Use devices "locale" if country code from 3G/Wifi doesn't work
+**25/02/2013**: Added ISO country code for Serbia (rs)
+**24/03/2013**: Changed icons and made country better readable.
+**15/03/2013**: Added missing Android.mk
