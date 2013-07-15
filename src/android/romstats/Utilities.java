@@ -20,6 +20,8 @@ import java.math.BigInteger;
 import java.net.NetworkInterface;
 import java.security.MessageDigest;
 import java.lang.Object; 
+import java.util.Locale;
+
 
 import android.content.Context;
 import android.os.SystemProperties;
@@ -30,6 +32,9 @@ public class Utilities {
 	public static final String SETTINGS_PREF_NAME = "ROMStats";
 	public static final String TAG = "ROMStats";
 
+	// For the Unique ID, I still use the IMEI or WiFi MAC address
+	// CyanogenMod switched to use the Settings.Secure.ANDROID_ID
+	// This is because the ANDROID_ID could change on hard reset, while IMEI remains equal
 	public static String getUniqueID(Context ctx) {
 		TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
 
@@ -1904,7 +1909,7 @@ public class Utilities {
 	public static String digest(String input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");
-			return new BigInteger(1, md.digest(input.getBytes())).toString(16).toUpperCase();
+			return new BigInteger(1, md.digest(input.getBytes())).toString(16).toUpperCase(Locale.US);
 		} catch (Exception e) {
 			return null;
 		}
