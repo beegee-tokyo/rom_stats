@@ -31,6 +31,7 @@ import android.util.Slog;
 public class Utilities {
 	public static final String SETTINGS_PREF_NAME = "ROMStats";
 	public static final String TAG = "ROMStats";
+	public static final int NOTIFICATION_ID = 1;
 
 	// For the Unique ID, I still use the IMEI or WiFi MAC address
 	// CyanogenMod switched to use the Settings.Secure.ANDROID_ID
