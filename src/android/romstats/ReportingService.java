@@ -91,7 +91,7 @@ public class ReportingService extends Service {
 		Log.d(Utilities.TAG, "SERVICE: ROM Version=" + RomVersion);
 
 		HttpClient httpclient = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(RomStatsUrl + "submit");
+		HttpPost httppost = new HttpPost(RomStatsUrl + "submit.php");
 		try {
 			List<NameValuePair> kv = new ArrayList<NameValuePair>(5);
 			kv.add(new BasicNameValuePair("device_hash", deviceId));
@@ -113,7 +113,7 @@ public class ReportingService extends Service {
 			if (status != 200)
 			{
 				Log.d(Utilities.TAG, "Second try with local IP");
-				httppost = new HttpPost("http://192.168.1.100/htcdesire/romstats/" + "submit");
+				httppost = new HttpPost("http://192.168.1.100/htcdesire/romstats/" + "submit.php");
 				try {
 					httppost.setEntity(new UrlEncodedFormEntity(kv));
 					resp = httpclient.execute(httppost);
