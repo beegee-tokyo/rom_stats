@@ -43,6 +43,7 @@ public class AnonymousStats extends PreferenceActivity
     protected static final String ANONYMOUS_FIRST_BOOT = "pref_anonymous_first_boot";
     protected static final String ANONYMOUS_LAST_CHECKED = "pref_anonymous_checked_in";
     protected static final String ANONYMOUS_ALARM_SET = "pref_anonymous_alarm_set";
+    protected static final String ANONYMOUS_OLD_VERSION = "pref_anonymous_old_version";
 
     private CheckBoxPreference mEnableReporting;
     private Preference mViewStats;
@@ -64,6 +65,27 @@ public class AnonymousStats extends PreferenceActivity
             btnUninstall = prefSet.findPreference(PREF_UNINSTALL);
             
             boolean firstBoot = mPrefs.getBoolean(ANONYMOUS_FIRST_BOOT, true);
+            
+            if (!firstBoot) {
+            	// get version of actual ROM
+            	String RomVersion = Utilities.getRomVersion();
+            	Log.d(Utilities.TAG, "RomVersion: " + RomVersion);
+            	
+            	// get saved value of ROM version (will be "0" if this is first install)
+            	string RomOldVersion = prefs.getString(AnonymousStats.ANONYMOUS_OLD_VERSION, "0");
+            	Log.d(Utilities.TAG, "RomOldVersion: " + RomOldVersion);
+            	
+            	// Check if saved version is same as actual version
+            	if (!(RomVersion.equals(RomOldVersion))) {
+            		// If not we flashed a new or different ROM.
+            		// Then set firstBoot = true and save new ROM version
+            		Log.d(Utilities.TAG, "Saved and new ROM version are different");
+            		firstBoot = true;
+            		mPrefs.edit().putString(ANONYMOUS_OLD_VERSION, RomVersion).apply();
+            		string NewRomOldVersion = prefs.getString(AnonymousStats.ANONYMOUS_OLD_VERSION, "0");
+            		Log.d(Utilities.TAG, "New saved RomOldVersion: " + NewRomOldVersion);
+            	}
+            }
             
             if (mEnableReporting.isChecked() && firstBoot) {
                 mPrefs.edit().putBoolean(ANONYMOUS_FIRST_BOOT, false).apply();
