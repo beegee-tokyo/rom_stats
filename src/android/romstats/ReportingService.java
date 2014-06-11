@@ -45,9 +45,9 @@ public class ReportingService extends Service {
 
     @Override
     public int onStartCommand (Intent intent, int flags, int startId) {
-        if (intent.getBooleanExtra("firstBoot", false)) {
-            promptUser();
+        if (intent.getBooleanExtra("promptUser", false)) {
             Log.d(Utilities.TAG, "Prompting user for opt-in.");
+            promptUser();
         } else {
             Log.d(Utilities.TAG, "User has opted in -- reporting.");
             Thread thread = new Thread() {
@@ -108,24 +108,6 @@ public class ReportingService extends Service {
 			Log.d(Utilities.TAG, "Response is: " + resp.getStatusLine().getStatusCode());
             getSharedPreferences(Utilities.SETTINGS_PREF_NAME, 0).edit().putLong(AnonymousStats.ANONYMOUS_LAST_CHECKED,
                     System.currentTimeMillis()).apply();
-         int status = resp.getStatusLine().getStatusCode();
-                    
-			if (status != 200)
-			{
-				Log.d(Utilities.TAG, "Second try with local IP");
-				httppost = new HttpPost("http://192.168.1.100/htcdesire/romstats/" + "submit.php");
-				try {
-					httppost.setEntity(new UrlEncodedFormEntity(kv));
-					resp = httpclient.execute(httppost);
-					
-					Log.d(Utilities.TAG, "Response is: " + resp.getStatusLine().getStatusCode());
-						getSharedPreferences(Utilities.SETTINGS_PREF_NAME, 0).edit().putLong(AnonymousStats.ANONYMOUS_LAST_CHECKED,
-								System.currentTimeMillis()).apply();
-				} catch (Exception e) {
-					Log.e(Utilities.TAG, "Got Exception", e);
-				}
-			}
-
       } catch (Exception e) {
 			Log.e(Utilities.TAG, "Got Exception", e);
 		}
