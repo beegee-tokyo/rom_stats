@@ -26,14 +26,44 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Log;
+import android.preference.CheckBoxPreference;
 
 public class ReportingServiceManager extends BroadcastReceiver {
+
+    protected static final String ANONYMOUS_OLD_VERSION = "pref_anonymous_old_version";
+    protected static final String ANONYMOUS_FIRST_BOOT = "pref_anonymous_first_boot";
+    protected static final String ANONYMOUS_LAST_CHECKED = "pref_anonymous_checked_in";
+    protected static final String ANONYMOUS_ALARM_SET = "pref_anonymous_alarm_set";
+
+    private CheckBoxPreference mEnableReporting;
 
     public static final long dMill = 24 * 60 * 60 * 1000;
     //public static final long tFrame = 7 * dMill;
 	
     @Override
     public void onReceive(Context ctx, Intent intent) {
+        // get version of actual ROM
+        String RomVersion = Utilities.getRomVersion();
+        Log.d(Utilities.TAG, "RSM: RomVersion: " + RomVersion);
+            	
+        // get saved value of ROM version (will be "0" if this is first install)
+        SharedPreferences mPrefs = ctx.getSharedPreferences(Utilities.SETTINGS_PREF_NAME, 0);
+        String RomOldVersion = mPrefs.getString(ANONYMOUS_OLD_VERSION, "0");
+        Log.d(Utilities.TAG, "RSM: RomOldVersion: " + RomOldVersion);
+            	
+        // Check if saved version is same as actual version
+        if (!(RomVersion.equals(RomOldVersion))) {
+            // If not we flashed a new or different ROM.
+            // Then we delete the shared preferences to restart ROMstats from scratch
+            Log.d(Utilities.TAG, "RSM: Saved and new ROM version are different");
+            mPrefs.edit().putString(ANONYMOUS_OLD_VERSION, RomVersion).apply();
+            String NewRomOldVersion = mPrefs.getString(ANONYMOUS_OLD_VERSION, "0");
+            Log.d(Utilities.TAG, "RSM: New saved RomOldVersion: " + NewRomOldVersion);
+            mPrefs.edit().remove(ANONYMOUS_FIRST_BOOT).apply();
+            mPrefs.edit().remove(ANONYMOUS_LAST_CHECKED).apply();
+            mPrefs.edit().remove(ANONYMOUS_ALARM_SET).apply();
+        }
+        
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
             setAlarm(ctx);
         } else {
