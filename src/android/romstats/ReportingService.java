@@ -45,7 +45,7 @@ public class ReportingService extends Service {
 
     @Override
     public int onStartCommand (Intent intent, int flags, int startId) {
-        if (intent.getBooleanExtra("promptUser", false)) {
+        if (intent.getBooleanExtra("firstBoot", false)) {
             Log.d(Utilities.TAG, "Prompting user for opt-in.");
             promptUser();
         } else {
