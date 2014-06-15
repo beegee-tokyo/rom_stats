@@ -56,12 +56,10 @@ public class ReportingServiceManager extends BroadcastReceiver {
             // If not we flashed a new or different ROM.
             // Then we delete the shared preferences to restart ROMstats from scratch
             Log.d(Utilities.TAG, "RSM: Saved and new ROM version are different");
+            mPrefs.edit().clear().commit();
             mPrefs.edit().putString(ANONYMOUS_OLD_VERSION, RomVersion).apply();
             String NewRomOldVersion = mPrefs.getString(ANONYMOUS_OLD_VERSION, "0");
             Log.d(Utilities.TAG, "RSM: New saved RomOldVersion: " + NewRomOldVersion);
-            mPrefs.edit().remove(ANONYMOUS_FIRST_BOOT).apply();
-            mPrefs.edit().remove(ANONYMOUS_LAST_CHECKED).apply();
-            mPrefs.edit().remove(ANONYMOUS_ALARM_SET).apply();
         }
         
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED)) {
